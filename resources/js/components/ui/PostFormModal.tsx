@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
- 
+import {Toaster, toast} from "sonner";
+
+
 interface Post {
   id?: number;
   title: string;
@@ -20,6 +22,7 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
   const [preview, setPreview] = useState<string>("");
 
   useEffect(() => {
+    <Toaster position="top-right" richColors/>
     if (post) {
       setFormData({ title: post.title, content: post.content, picture: post.picture || "" });
       setPreview(post.picture || "");
@@ -52,17 +55,22 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
     if (selectedFile) {
       data.append("picture", selectedFile);
     }
+
+    const successMessage = post?.id? "Post Updated Successfully":"Post created Successfully";
+    const errorMessage = post?.id? "Failed to Update":"Failed to Create Post";
     
     if (post?.id) {
       data.append("_method", "PUT");
       router.post(`/posts/${post.id}`, data, {
         onSuccess: () => {
  
+          toast.success(successMessage);
           closeModal();
           router.reload();
         },
         onError: (errors) => {
- 
+          
+          toast.error(errorMessage);
           console.error(errors.message || "Failed to submit post.");
         },
       });
@@ -70,6 +78,7 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
       router.post("/posts", data, {
         onSuccess: () => {
  
+          toast.success("Post created successfully");
           closeModal();
           router.reload();
         },
