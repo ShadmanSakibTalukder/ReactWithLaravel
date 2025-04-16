@@ -3,6 +3,9 @@ import { router } from "@inertiajs/react";
 import {Toaster, toast} from "sonner";
 
 
+
+<Toaster position="top-right" richColors/>  
+
 interface Post {
   id?: number;
   title: string;
@@ -22,8 +25,7 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
   const [preview, setPreview] = useState<string>("");
 
   useEffect(() => {
-    <Toaster position="top-right" richColors/>
-    if (post) {
+     if (post) {
       setFormData({ title: post.title, content: post.content, picture: post.picture || "" });
       setPreview(post.picture || "");
       setSelectedFile(null);

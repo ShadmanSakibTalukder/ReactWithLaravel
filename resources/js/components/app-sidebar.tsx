@@ -19,6 +19,16 @@ const mainNavItems: NavItem[] = [
         href: '/posts',
         icon: FileText,
     },
+    {
+        title: 'Products',
+        href: '/products',
+        icon: FileText,
+    },
+    {
+        title: 'Suppliers',
+        href: '/suppliers',
+        icon: FileText,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
