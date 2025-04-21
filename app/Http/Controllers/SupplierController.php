@@ -20,6 +20,53 @@ class SupplierController extends Controller
         ]);
     }
 
+
+    public function store(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'supplier_name'   => 'required|string|max:255',
+            'company' => 'required|string',
+            'address' => 'nullable|string',
+            'contact' => 'nullable|string', 
+        ]);
+    
+        $data = $request->only(['supplier_name', 'company', 'address', 'contact']);
+    
+        Supplier::create($data);
+    
+        return redirect()->route('suppliers.index')->with('success', 'Supplier created successfully.');
+    }
+
+
+    public function update(Request $request, Supplier $supplier)
+    {
+        $request->validate([
+            'supplier_name'   => 'required|string|max:255',
+            'company' => 'required|string',
+            'address' => 'nullable|string',
+            'contact' => 'nullable|string', 
+        ]);
+    
+        $data = $request->only(['supplier_name', 'company', 'address', 'contact']);
+    
+        $supplier->update($data);
+    
+        return redirect()->route('suppliers.index')->with('success', 'Supplier updated successfully.');
+    }
+
+
+
+    public function destroy(Supplier $supplier)
+    {
+        $supplier->delete();
+
+        return redirect()->route('suppliers.index')->with('success', 'Supplier deleted successfully.');
+    }
+
+
+
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -31,10 +78,7 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
      * Display the specified resource.
@@ -52,19 +96,5 @@ class SupplierController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    
 }

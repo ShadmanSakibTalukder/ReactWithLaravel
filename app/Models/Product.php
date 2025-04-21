@@ -15,4 +15,9 @@ class Product extends Model
         'contact',
         'quantity',
     ];
+
+    // public function supplier()
+    // {
+    //     return $this->belongsTo(supplier::class);
+    // }
 }
