@@ -21,7 +21,7 @@ class GoodsController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('goods/goods-form');   
     }
 
     /**
