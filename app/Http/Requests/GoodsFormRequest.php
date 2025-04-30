@@ -24,10 +24,11 @@ class GoodsFormRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'price' => 'required|numerical|min:0',
+            'price' => 'required|numeric|min:0',
             'featured_image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:5120'
         ];
     }
+// @return array
 
     public function messages(): array {
 
@@ -35,11 +36,11 @@ class GoodsFormRequest extends FormRequest
             'name.required' => 'Please enter the product name',
             'name.string' => 'The product name must be a string',
             'name.max' => 'The product name may not be greater than 255 characters',
-            'desciption.required' => 'Please enter product description',
+            'description.required' => 'Please enter product description',
             'description.string' => 'The product description must be a string',
-            'description.max' => 'The product description may not be greater than 255 characters',
+            'description.max' => 'The product description may not be greater than 1000 characters',
             'price.required' => 'Please enter the product price',
-            'price.numerical' => 'The product price must be a number',
+            'price.numeric' => 'The product price must be a number',
             'price.min' => 'The product price must be atleast 0',
             'featured_image.image' => 'The featured image must be an image file',
             'featured_image.mimes' => 'The featured image must be a file type:jpg,png,jpeg,gif',
