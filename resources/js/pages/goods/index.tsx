@@ -1,8 +1,9 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,10 +13,24 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
+
+    const {flash} =usePage<{flash?: {success?: string; error?: string}}>().props;
+    const flashMessage = flash?.success || flash?.error;
+
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Goods" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+                
+                { (flash?.success || flash?.error) && 
+                (<Alert variant={'default'}>
+
+                    <AlertTitle>{(flash.success ? 'Success' : 'Error')}
+                        <AlertDescription>{flashMessage}</AlertDescription>
+                    </AlertTitle>
+
+                </Alert>)}
                 <div className="ml-auto">
                 <Link className='bg-emerald-600 px-4 py-2 rounded-lg text-white text-md cursor-pointer hover:opacity-90' as='button' href={route('goods.create')}> Add Goods</Link>
                 </div>
