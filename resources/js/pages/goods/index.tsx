@@ -1,9 +1,10 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,21 +17,29 @@ export default function Index() {
 
     const {flash} =usePage<{flash?: {success?: string; error?: string}}>().props;
     const flashMessage = flash?.success || flash?.error;
+    const [ showAlert, setShowAlert ] = useState( flashMessage ? true : false );
 
+    useEffect (() => {
+        if (flashMessage){
+           const timer = setTimeout(() => setShowAlert(false), 3000);
+
+           return () => clearTimeout(timer);
+        }
+
+    },  [flashMessage])
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Goods" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 
-                { (flash?.success || flash?.error) && 
-                (<Alert variant={'default'}>
+                { showAlert && flashMessage && (
+                <Alert variant={'default'} className={`${flash?.success ? 'bg-green-800' : 'bg-red-800'} ml-auto max-w-min text-white`}>
 
-                    <AlertTitle>{(flash.success ? 'Success' : 'Error')}
-                        <AlertDescription>{flashMessage}</AlertDescription>
-                    </AlertTitle>
+                        <AlertDescription className='text-white'>{flash?.success ? 'Success!' : 'Error!'} {''} {flashMessage}</AlertDescription>
 
-                </Alert>)}
+                </Alert>
+            )}
                 <div className="ml-auto">
                 <Link className='bg-emerald-600 px-4 py-2 rounded-lg text-white text-md cursor-pointer hover:opacity-90' as='button' href={route('goods.create')}> Add Goods</Link>
                 </div>
@@ -58,5 +67,5 @@ export default function Index() {
                 </div>
             </div>
         </AppLayout>
-    );
+    )
 }
