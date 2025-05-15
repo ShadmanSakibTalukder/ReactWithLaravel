@@ -18,7 +18,19 @@ class GoodsController extends Controller
      */
     public function index()
     {
-       return Inertia::render('goods/index');
+        $goods = Goods::latest()->get()->map(fn($goods) => [
+            'id' => $goods->id,
+            'name' => $goods->name,
+            'description' => $goods->description,
+            'price' => $goods->price,
+            'featured_image' => $goods->featured_image,
+            'featured_image_original_name' => $goods->featured_image_original_name,
+            'created_at' => $goods->created_at->format('d M Y')
+
+        ]);
+       return Inertia::render('goods/index', [
+        'goods' => $goods,
+       ]);
     }
 
     /**
