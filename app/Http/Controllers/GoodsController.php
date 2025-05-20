@@ -47,6 +47,7 @@ class GoodsController extends Controller
     public function store(GoodsFormRequest $request)
     {
         try{ 
+
             $featuredImage = null;
             if ($request->file('featured_image')){
                 $featuredImage = $request->file('featured_image');
@@ -58,8 +59,8 @@ class GoodsController extends Controller
                 'name' => $request->name,
                 'description' => $request->description,
                 'price' => $request->price,
-                'featured_image' => $request->featuredImage,
-                'featured_image_original_name'=> $request->featuredImageOriginalName,
+                'featured_image' => $featuredImage,
+                'featured_image_original_name'=> $featuredImageOriginalName,
     
            ]);
            if ($goods){
@@ -73,6 +74,7 @@ class GoodsController extends Controller
 
         } catch(Exception $e){
             Log::error('Good creation failed: ' .$e->getMessage());
+            return redirect()->back()->with('error', 'An unexpected error occurred. Please try again.');
 
         }
 
@@ -83,7 +85,10 @@ class GoodsController extends Controller
      */
     public function show(Goods $goods)
     {
-        //
+        return Inertia::render('goods/goods-form', [
+            'goods' => $goods,
+            'isView' => true,
+        ])
     }
 
     /**

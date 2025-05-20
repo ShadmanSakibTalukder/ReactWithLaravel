@@ -1,29 +1,35 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
+import { ArrowLeft } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { CustomTextarea } from '@/components/ui/custom-textarea';
 import { Button } from '@/components/ui/button';
-import { log } from 'console';
 import InputError from '@/components/input-error';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Create Goods',
-        href: ('/goods.create'),
-    },
-];
 
-export default function GoodsForm() {
+export default function GoodsForm({...props}) {
 
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        description: '',
-        price: '',
+    const {goods, isView , isEdit } = props;
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: `${isView? 'show': (isEdit? 'Update': 'Create')} Goods`,
+            href: ('/goods.create'),
+        },
+    ];
+
+
+
+
+
+    const { data, setData, processing, post, errors, reset, } = useForm({
+        name: goods?.name ||'',
+        description: goods?.description || '',
+        price: goods?.price ||'',
         featured_image: null as File | null,
     });
 
@@ -50,12 +56,12 @@ export default function GoodsForm() {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
 
                 <div className='ml-auto'>
-                <Link href={route('goods.index')} className='w-fit bg-emerald-600 px-4 py-2 rounded-lg text-white text-md cursor-pointer hover:opacity-90' as='button'>Back To Goods</Link>
+                <Link href={route('goods.index')} className='flex items-center w-fit bg-emerald-600 px-4 py-2 rounded-lg text-white text-md cursor-pointer hover:opacity-90' as='button'><ArrowLeft className='me-2'/>Back To Goods</Link>
                 </div>
             
             <Card>
                 <CardHeader>
-                    <CardTitle> Create Goods</CardTitle>
+                    <CardTitle> {isView? 'show': (isEdit? 'Update': 'Create')} Goods</CardTitle>
                 </CardHeader>
 
                 <CardContent>
@@ -75,6 +81,7 @@ export default function GoodsForm() {
                                 placeholder='Goods Name'
                                 autoFocus
                                 tabIndex={1}
+                                disabled={isView || processing}
                                 />
                                 <InputError message={errors.name}/>
                             </div>
@@ -90,6 +97,7 @@ export default function GoodsForm() {
                                 placeholder='Goods Description'
                                 rows={3}
                                 tabIndex={2}/>
+                                disabled={isView || processing}
                                  <InputError message={errors.description}/>
                             </div>
 
@@ -104,6 +112,7 @@ export default function GoodsForm() {
                                 placeholder='Goods Price'
                                 autoFocus
                                 tabIndex={3}
+                                disabled={isView || processing}
                                 />
                                 <InputError message={errors.price}/>
                             </div>
